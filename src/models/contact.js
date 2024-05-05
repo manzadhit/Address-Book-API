@@ -67,4 +67,16 @@ const updateContact = (contactId, requestData) => {
   })
 }
 
-module.exports = { createContact, getContact, getContactById, updateContact};
+const deleteContact = (contactId) => {
+  return new Promise((resolve, reject) => {
+    db.run("DELETE FROM Contacts WHERE id = ?", [contactId], (err) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve()
+      }
+    })
+  })
+}
+
+module.exports = { createContact, getContact, getContactById, updateContact, deleteContact};

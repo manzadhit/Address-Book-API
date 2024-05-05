@@ -4,6 +4,7 @@ const {
   getContact,
   getContactById,
   updateContact,
+  deleteContact,
 } = require("../models/contact");
 
 const createContactController = async (req, res) => {
@@ -61,7 +62,7 @@ const updateContactController = async (req, res) => {
     await getContactById(contactId);
     await updateContact(contactId, req.body);
     const contactUpdated = await getContactById(contactId);
-    
+
     res.status(httpStatus.OK).send({
       status: httpStatus.OK,
       message: "successfully update contact",
@@ -75,9 +76,27 @@ const updateContactController = async (req, res) => {
   }
 };
 
+const deleteContactController = async (req, res) => {
+  try {
+    const { contactId } = req.params;
+    await getContactById(contactId);
+    await deleteContact(contactId);
+    res.status(httpStatus.OK).send({
+      status: httpStatus.OK,
+      message: "Successfully delete contact",
+    });
+  } catch (error) {
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+      status: httpStatus.INTERNAL_SERVER_ERROR,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createContactController,
   getContactController,
   getContactByIdController,
-  updateContactController
+  updateContactController,
+  deleteContactController
 };
