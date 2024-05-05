@@ -8,6 +8,7 @@ const {
   updateContactController,
   deleteContactController,
 } = require("../controllers/contactController");
+
 const {
   createGroupController,
   getAllGroupsController,
@@ -15,6 +16,7 @@ const {
   updateGroupController,
   deleteGroupController,
 } = require("../controllers/groupController");
+const { createContactGroupController, getAllContactGroupsController } = require("../controllers/contactGroupController");
 
 // Contact Routes
 router
@@ -36,5 +38,8 @@ router
   .get(getGroupByIdController)
   .put(updateGroupController)
   .delete(deleteGroupController);
+
+// contactGroup Routes
+router.route("/contactGroups").post(createContactGroupController).get(getAllContactGroupsController);
 
 module.exports = router;
