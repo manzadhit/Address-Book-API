@@ -39,4 +39,18 @@ const getContact =  () => {
   })
 }
 
-module.exports = { createContact, getContact };
+const getContactById = (contactId) => {
+  return new Promise((resolve, reject) => {
+    db.get("SELECT * FROM Contacts WHERE id = ?", [contactId], (err, data) => {
+      if(err) {
+        reject(err);
+      } else if(!data) {
+        reject(new Error(`Contact with id ${contactId} not found`));
+      }else {
+        resolve(data);
+      }
+    })
+  })
+}
+
+module.exports = { createContact, getContact, getContactById };
