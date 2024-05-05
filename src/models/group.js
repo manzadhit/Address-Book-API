@@ -24,4 +24,16 @@ const createGroup = (groupName) => {
   });
 };
 
-module.exports = {createGroup};
+const getAllGroups = () => {
+  return new Promise((resolve, reject) => {
+    db.all("SELECT * FROM Groups", (err, data) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    })
+  })
+}
+
+module.exports = {createGroup, getAllGroups};
