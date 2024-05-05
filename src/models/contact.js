@@ -27,4 +27,16 @@ const createContact = (requestData) => {
   });
 };
 
-module.exports = { createContact };
+const getContact =  () => {
+  return new Promise((resolve, reject) => {
+    db.all("SELECT * FROM Contacts", (err, data) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    })
+  })
+}
+
+module.exports = { createContact, getContact };

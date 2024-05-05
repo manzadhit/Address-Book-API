@@ -1,16 +1,26 @@
-const { createContact } = require("../models/contact");
+const httpStatus = require("http-status");
+const { createContact, getContact } = require("../models/contact");
 
 const createContactController = async (req, res) => {
   try {
     const contact = await createContact(req.body);
-    res.status(200).send({
+    res.status(httpStatus.CREATED).send({
+      status: httpStatus.CREATED,
       message: "successfully create contact",
-      data: contact
-    })
-    console.log(contact);
+      data: contact,
+    });
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
-module.exports = { createContactController };
+const getContactController = async (req, res) => {
+  const allContact = await getContact();
+  res.status(httpStatus.OK).send({
+    status: httpStatus.OK,
+    message: "successfully get all contacts",
+    data: allContact,
+  });
+};
+
+module.exports = { createContactController, getContactController };
