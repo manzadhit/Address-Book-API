@@ -14,27 +14,48 @@ const createContactController = async (req, res) => {
       data: contact,
     });
   } catch (error) {
-    console.log(error.message);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+      status: httpStatus.INTERNAL_SERVER_ERROR,
+      message: error.message,
+    });
   }
 };
 
 const getContactController = async (req, res) => {
-  const allContact = await getContact();
-  res.status(httpStatus.OK).send({
-    status: httpStatus.OK,
-    message: "successfully get all contacts",
-    data: allContact,
-  });
+  try {
+    const allContact = await getContact();
+    res.status(httpStatus.OK).send({
+      status: httpStatus.OK,
+      message: "successfully get all contacts",
+      data: allContact,
+    });
+  } catch (error) {
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+      status: httpStatus.INTERNAL_SERVER_ERROR,
+      message: error.message,
+    });
+  }
 };
 
 const getContactByIdController = async (req, res) => {
-  const { contactId } = req.params;
-  const contact = await getContactById(contactId);
-  res.status(httpStatus.OK).send({
-    status: httpStatus.OK,
-    message: "successfully get contact",
-    data: contact,
-  });
+  try {
+    const { contactId } = req.params;
+    const contact = await getContactById(contactId);
+    res.status(httpStatus.OK).send({
+      status: httpStatus.OK,
+      message: "successfully get contact",
+      data: contact,
+    });
+  } catch (error) {
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+      status: httpStatus.INTERNAL_SERVER_ERROR,
+      message: error.message,
+    });
+  }
 };
 
-module.exports = { createContactController, getContactController, getContactByIdController };
+module.exports = {
+  createContactController,
+  getContactController,
+  getContactByIdController,
+};
