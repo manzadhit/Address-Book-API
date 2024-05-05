@@ -36,8 +36,53 @@ const getAllContactGroups = () => {
   });
 };
 
+const getContactGroupById = (contactGroupId) => {
+  return new Promise((resolve, reject) => {
+    db.get("SELECT * FROM GroupContact WHERE id = ?", [contactGroupId], (err, data) => {
+      if (err) {
+        reject(err);
+      } else if (!data) {
+        reject(new Error(`ContactGroup with id ${contactGroupId} not found`));
+      } else {
+        resolve(data);
+      }
+    });
+  });
+};
+
+const updateContactGroup = (contactGroupId, contactId, groupId) => {
+  return new Promise((resolve, reject) => {
+    db.run(
+      "UPDATE GroupContact SET contactId = ?, groupId = ? WHERE id = ?",
+      [contactId, groupId, contactGroupId],
+      (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      }
+    );
+  });
+};
+
+const deleteContactGroup = (contactGroupId) => {
+  return new Promise((resolve, reject) => {
+    db.run("DELETE FROM GroupContact WHERE id = ?", [contactGroupId], (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
 
 module.exports = {
   createContactGroup,
   getAllContactGroups,
+  getContactGroupById,
+  updateContactGroup,
+  deleteContactGroup
 };
