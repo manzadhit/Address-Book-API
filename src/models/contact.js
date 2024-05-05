@@ -53,4 +53,18 @@ const getContactById = (contactId) => {
   })
 }
 
-module.exports = { createContact, getContact, getContactById };
+const updateContact = (contactId, requestData) => {
+  const { name, phoneNumber, company, email } = requestData;
+
+  return new Promise((resolve, reject) => {
+    db.run("UPDATE Contacts SET name = ?, phoneNumber = ?, company = ?, email = ? WHERE id = ?", [name, phoneNumber, company, email, contactId], (err) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    })
+  })
+}
+
+module.exports = { createContact, getContact, getContactById, updateContact};

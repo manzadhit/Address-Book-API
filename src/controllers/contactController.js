@@ -3,6 +3,7 @@ const {
   createContact,
   getContact,
   getContactById,
+  updateContact,
 } = require("../models/contact");
 
 const createContactController = async (req, res) => {
@@ -54,8 +55,29 @@ const getContactByIdController = async (req, res) => {
   }
 };
 
+const updateContactController = async (req, res) => {
+  try {
+    const { contactId } = req.params;
+    await getContactById(contactId);
+    await updateContact(contactId, req.body);
+    const contactUpdated = await getContactById(contactId);
+    
+    res.status(httpStatus.OK).send({
+      status: httpStatus.OK,
+      message: "successfully update contact",
+      data: contactUpdated,
+    });
+  } catch (error) {
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+      status: httpStatus.INTERNAL_SERVER_ERROR,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createContactController,
   getContactController,
   getContactByIdController,
+  updateContactController
 };
