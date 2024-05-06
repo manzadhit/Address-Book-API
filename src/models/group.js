@@ -87,7 +87,16 @@ const deleteGroup = (groupId) => {
       if (err) {
         reject(err);
       } else {
-        resolve();
+        db.run(
+          "DELETE FROM GroupContact WHERE groupId = ?", [groupId],
+          (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          }
+        );
       }
     });
   });

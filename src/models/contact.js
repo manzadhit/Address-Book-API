@@ -27,59 +27,82 @@ const createContact = (requestData) => {
   });
 };
 
-const getContact =  () => {
+const getContact = () => {
   return new Promise((resolve, reject) => {
-    db.all(`SELECT Contacts.*, Groups.groupName
+    db.all(
+      `SELECT Contacts.*, Groups.groupName
     FROM Contacts
-    JOIN GroupContact ON Contacts.id = GroupContact.contactId
-    JOIN Groups ON Groups.id = GroupContact.groupId`, (err, data) => {
-      if(err) {
-        reject(err);
-      } else {
-        resolve(data);
+    LEFT JOIN GroupContact ON Contacts.id = GroupContact.contactId
+    LEFT JOIN Groups ON Groups.id = GroupContact.groupId`,
+      (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
       }
-    })
-  })
-}
+    );
+  });
+};
 
 const getContactById = (contactId) => {
   return new Promise((resolve, reject) => {
     db.get("SELECT * FROM Contacts WHERE id = ?", [contactId], (err, data) => {
-      if(err) {
+      if (err) {
         reject(err);
-      } else if(!data) {
+      } else if (!data) {
         reject(new Error(`Contact with id ${contactId} not found`));
-      }else {
+      } else {
         resolve(data);
       }
-    })
-  })
-}
+    });
+  });
+};
 
 const updateContact = (contactId, requestData) => {
   const { name, phoneNumber, company, email } = requestData;
 
   return new Promise((resolve, reject) => {
-    db.run("UPDATE Contacts SET name = ?, phoneNumber = ?, company = ?, email = ? WHERE id = ?", [name, phoneNumber, company, email, contactId], (err) => {
-      if(err) {
-        reject(err);
-      } else {
-        resolve();
+    db.run(
+      "UPDATE Contacts SET name = ?, phoneNumber = ?, company = ?, email = ? WHERE id = ?",
+      [name, phoneNumber, company, email, contactId],
+      (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
       }
-    })
-  })
-}
+    );
+  });
+};
 
 const deleteContact = (contactId) => {
   return new Promise((resolve, reject) => {
     db.run("DELETE FROM Contacts WHERE id = ?", [contactId], (err) => {
-      if(err) {
+      if (err) {
         reject(err);
       } else {
-        resolve()
+        db.run(
+          "DELETE FROM GroupContact WHERE contactId = ?",
+          [contactId],
+          (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          }
+        );
       }
-    })
-  })
-}
+    });
+  });
+};
 
-module.exports = { createContact, getContact, getContactById, updateContact, deleteContact};
+module.exports = {
+  createContact,
+  getContact,
+  getContactById,
+  updateContact,
+  deleteContact,
+};
