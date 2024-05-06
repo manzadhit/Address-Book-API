@@ -28,10 +28,17 @@ const createGroupController = async (req, res) => {
 const getAllGroupsController = async (req, res) => {
   try {
     const allGroups = await getAllGroups();
+    const transformedData = allGroups.map((group) => {
+      return {
+        ...group,
+        listContact: JSON.parse(group.listContact),
+      };
+    });
+
     res.status(httpStatus.OK).send({
       status: httpStatus.OK,
       message: "Successfully get all groups",
-      data: allGroups,
+      data: transformedData,
     });
   } catch (error) {
     res.status(httpStatus.INTERNAL_SERVER_ERROR).send({

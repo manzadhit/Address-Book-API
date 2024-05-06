@@ -26,13 +26,28 @@ const createGroup = (groupName) => {
 
 const getAllGroups = () => {
   return new Promise((resolve, reject) => {
-    db.all("SELECT * FROM Groups", (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(data);
+    db.all(
+      `SELECT Groups.*,
+      json_group_array(
+        json_object(
+          'name', Contacts.name,
+          'phoneNumber', Contacts.phoneNumber,
+          'company', Contacts.company,
+          'email', Contacts.email
+        )
+      ) AS listContact
+      FROM Groups
+      LEFT JOIN GroupContact ON Groups.id = GroupContact.groupId
+      LEFT JOIN Contacts ON Contacts.id = GroupContact.contactId
+      GROUP BY Groups.id`
+      , (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
       }
-    });
+    );
   });
 };
 
@@ -78,4 +93,10 @@ const deleteGroup = (groupId) => {
   });
 };
 
-module.exports = { createGroup, getAllGroups, getGroupById, updateGroup, deleteGroup };
+module.exports = {
+  createGroup,
+  getAllGroups,
+  getGroupById,
+  updateGroup,
+  deleteGroup,
+};
