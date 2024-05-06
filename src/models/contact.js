@@ -29,7 +29,10 @@ const createContact = (requestData) => {
 
 const getContact =  () => {
   return new Promise((resolve, reject) => {
-    db.all("SELECT * FROM Contacts", (err, data) => {
+    db.all(`SELECT Contacts.*, Groups.groupName
+    FROM Contacts
+    JOIN GroupContact ON Contacts.id = GroupContact.contactId
+    JOIN Groups ON Groups.id = GroupContact.groupId`, (err, data) => {
       if(err) {
         reject(err);
       } else {
