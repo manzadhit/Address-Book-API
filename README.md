@@ -53,6 +53,7 @@ cd address-book-api
 npm install
 ```
 Perintah ini akan menginstal semua dependensi yang diperlukan, termasuk Express.js dan paket-paket lainnya yang tercantum dalam `package.json`.
+
 4. **Konfigurasi Database**
 Proyek ini menggunakan SQLite sebagai database default. Anda tidak perlu melakukan konfigurasi tambahan untuk menggunakan SQLite. Namun, jika Anda ingin menggunakan database lain seperti MySQL atau PostgreSQL, Anda perlu mengonfigurasi koneksi database sesuai dengan preferensi Anda.
 
